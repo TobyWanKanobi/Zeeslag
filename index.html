@@ -31,9 +31,10 @@
 
 <div class="container content">
     <div class="row">
-        <div class="col-md-4">
 
-            <div id="gameboard1" class="gameboard">
+        <div class="col-md-4">
+            <h2 class="h2">Your board</h2>
+            <div id="myGameboard" class="gameboard">
                 <div class="y-as" style="float:left;">
                     <div>1</div>
                     <div>2</div>
@@ -65,9 +66,10 @@
 
             </div>
         </div>
-        <div class="col-md-4">
 
-            <div id="gameboard2" class="gameboard">
+        <div class="col-md-4">
+            <h2 class="h2"> Enemy's board</h2>
+            <div id="enemyGameboard" class="gameboard">
                 <div class="y-as" style="float:left;">
                     <div>1</div>
                     <div>2</div>
@@ -116,6 +118,10 @@
                     </div>
                 </div>
             </div>
+            <div>
+                <button id="resetGames" class="btn btn-primary">Reset Spellen</button>
+            </div>
+            <br />
             <div class="shipPanel">
                 <div id="ships" class="panel panel-warning">
                     <div class="panel-heading">

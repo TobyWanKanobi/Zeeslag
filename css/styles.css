@@ -3,9 +3,15 @@ body {
 }
 
 .gameboard {
-	width: 520px;
-	margin: 0 auto;
-	
+     width: 520px;
+     margin: 0 auto;
+
+ }
+
+#enemyGameboard div.cell:hover {
+    background-color:#FF0000;
+    background-image: url(images/cross.png);
+
 }
 
 .gameboard .locations {
@@ -71,7 +77,7 @@ body {
 }
 
 .gamepanel {
-    height: 220px;
+    height: 165px;
     overflow-y:scroll;
     text-align: left;
 }
@@ -79,4 +85,8 @@ body {
 .title {
     text-align: center;
     margin: 20px;
+}
+
+.h2  {
+    color: #ffffff;
 }
