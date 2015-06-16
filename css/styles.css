@@ -2,42 +2,43 @@ body {
 	background-color: #000000;
 }
 
-#gameboard {
-	width: 720px;
+.gameboard {
+	width: 520px;
 	margin: 0 auto;
 	
 }
 
-#gameboard #locations {
-	width: 700px;
-	height: 700px;
+.gameboard .locations {
+	width: 500px;
+	height: 500px;
 	background-image: url('../images/water_texture.jpg');
 	}
 	
-#gameboard #locations .cell {
+.gameboard .locations .cell {
 	float: left;
-	width: 70px;
-	height: 70px;
+	width: 50px;
+	height: 50px;
 	word-wrap: break-word;
 	border: solid 1px #00FF00;
 	overflow:hidden;
 }
 
-#gameboard #y-as div, #gameboard #x-as div {
+.gameboard .y-as div, #gameboard #x-as div {
 	/*border: solid 2px #00FF00;*/
 	font-weight: bold;
 	color: #EEEEEE;
 }
 
-#gameboard #y-as div {
-	height: 70px;
+.gameboard .y-as div {
+	height: 50px;
 	width: 20px;
-	line-height: 70px;
+	line-height: 50px;
 }
 
-#gameboard #x-as div {
+.gameboard .x-as div {
 	float: right;
-	width: 70px;
+    color: #ffffff;
+	width: 50px;
 	height: 20px;
 	text-align: center;
 }
@@ -57,4 +58,25 @@ body {
 
 .missed {
 	background-color: #0000FF;
+}
+
+.container {
+    width: 95%;
+    margin-right: 20px;
+}
+
+
+.header {
+    margin-bottom: 80px;
+}
+
+.gamepanel {
+    height: 220px;
+    overflow-y:scroll;
+    text-align: left;
+}
+
+.title {
+    text-align: center;
+    margin: 20px;
 }
