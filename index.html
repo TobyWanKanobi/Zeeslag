@@ -12,10 +12,8 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <script src="js/jquery-2.1.4.js"></script>
     <script src="js/bootstrap.js"></script>
-    <script src="js/classes.js"></script>
-    <script src="js/BattleshipService.js"></script>
-    <script src="js/Battleship.js"></script>
     <script src="js/App.js"></script>
+	<script src="js/BattleshipAPI.js"></script>
 </head>
 <body>
 
@@ -166,6 +164,19 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+<script type="text/javascript">
+
+	/*BattleshipAPI.deleteGames(function(response){ console.log(response); });
+	BattleshipAPI.getMyGames(function(response){console.log(response);});
+	BattleshipAPI.newPlayerGame(function(response){ console.log(response);});
+	BattleshipAPI.newCPUGame(function(response){ console.log(response);});
+	BattleshipAPI.getGameInfo(100, function(response){ console.log(response); });
+	BattleshipAPI.getShips(function(response){ console.log(response);});
+	BattleshipAPI.submitGameBoard(1, {}, function(response){ console.log(response); });
+	BattleshipAPI.submitShot(1, {}, function(response){ console.log(response); });*/
+	
+	console.log(App.generateCoords());
+</script>
 </body>
 
 </html>
