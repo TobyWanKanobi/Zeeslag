@@ -28,11 +28,20 @@ var App = new function() {
 		});
 	};
 
+    this.populateShipList = function(shipList) {
+        $(shipList).each(function(){
+
+            $('.shiplist').append('<table><tr><td width="200">'+$(this)[0].name+'</td><td><img src="images/glyphicons-212-right-arrow.png" /><img src="images/glyphicons-213-down-arrow.png" /></td></tr></table>');
+        })
+    }
+
 };
 
 
 $(document).ready(function(){
 	
 	App.initBoard();
+
+    BattleshipAPI.getShips(App.populateShipList);
 
 });

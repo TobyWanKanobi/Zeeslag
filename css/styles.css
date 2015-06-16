@@ -10,8 +10,7 @@ body {
 
 #enemyGameboard div.cell:hover {
     background-color:#FF0000;
-    background-image: url(images/cross.png);
-
+ 
 }
 
 .gameboard .locations {
