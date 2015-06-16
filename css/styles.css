@@ -10,7 +10,7 @@ body {
 
 #enemyGameboard div.cell:hover {
     background-color:#FF0000;
- 
+
 }
 
 .gameboard .locations {
@@ -89,4 +89,20 @@ body {
 .h2  {
     color: #ffffff;
     margin-left: 40px;
+}
+
+div#boat.dropped {
+    background: purple;
+}
+
+
+
+.filled {
+    background: red;
+}
+
+.boat {
+
+
+    cursor: move;
 }

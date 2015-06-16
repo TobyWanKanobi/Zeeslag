@@ -2,6 +2,9 @@ var App = new function() {
 	
 	// Properties
 	this.gameBoard = '.gameboard';
+    this.shipLocations = { "ships": []};
+
+
 	
 	// Methods
 	this.generateCoords = function() {
@@ -31,7 +34,8 @@ var App = new function() {
     this.populateShipList = function(shipList) {
         $(shipList).each(function(){
 
-            $('.shiplist').append('<table><tr><td width="200">'+$(this)[0].name+'</td><td><img src="images/glyphicons-212-right-arrow.png" /><img src="images/glyphicons-213-down-arrow.png" /></td></tr></table>');
+            $('.shiplist').append('<table><tr><td width="200">'+$(this)[0].name+'</td><td width="100"><img src="images/glyphicons-212-right-arrow.png" class="boat" /><img src="images/glyphicons-213-down-arrow.png" class="boat" /></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr></table>');
+            $('.boat').draggable();
         })
     }
 
@@ -43,5 +47,25 @@ $(document).ready(function(){
 	App.initBoard();
 
     BattleshipAPI.getShips(App.populateShipList);
+
+    // drag and drop the boats
+    $('.boat').draggable();
+
+    $('div', '.locations').each(function() {
+
+        var $div = $(this);
+
+        $div.droppable({
+            drop: function() {
+                $('.boat').addClass('dropped').
+                    css({
+                        /*top: $div.offset().top,
+                        left: $div.offset().left*/
+                    });
+                $div.addClass("filled");
+               console.log('hoi');
+            }
+        });
+    });
 
 });
