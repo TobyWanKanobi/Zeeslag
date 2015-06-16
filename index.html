@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="nl">
+	<head>
+		<meta charset="utf-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<!--<link rel="shortcut icon" href="/images/favicon.ico">-->
+		<title>Zeeslag</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+		<script src="js/jquery-2.1.4.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script src="js/classes.js"></script>
+		<script src="js/BattleshipService.js"></script>
+		<script src="js/Battleship.js"></script>
+		<script src="js/App.js"></script>
+	</head>
+	<body>
+	
+	<div class="container">
+
+		<div class="row">
+			<div class="col-md-8" style="text-align: center; margin: 20px;">
+				<img src="images/battleship-movie-logo.png" alt="Zeeslag" />
+			</div>
+		</div>
+	
+	</div>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8">
+			
+				<div id="gameboard">
+			<div id="y-as"style="float:left;">
+				<div>10</div>
+				<div>9</div>
+				<div>8</div>
+				<div>7</div>
+				<div>6</div>
+				<div>5</div>
+				<div>4</div>
+				<div>3</div>
+				<div>2</div>
+				<div>1</div>
+			</div>
+			<div id="locations" style="float:left;">
+			</div>
+			
+			<div style="clear: both;"></div>
+			<div id="x-as">
+				<div>J</div>
+				<div>I</div>
+				<div>H</div>
+				<div>G</div>
+				<div>F</div>
+				<div>E</div>
+				<div>D</div>
+				<div>C</div>
+				<div>B</div>
+				<div>A</div>
+			</div>
+			
+		</div>
+			</div>
+			
+			<div class="col-md-4">
+				<button id="newGamePlayer" class="btn btn-success">Nieuw spel (tegenspeler)</button>
+				<button id="newGameComputer" class="btn btn-primary">Nieuw spel (computer)</button>
+				
+				<div class="panel panel-warning">
+					<div class="panel-heading">
+							<h2 class="panel-title">Spellen</h2>
+					</div>
+					<div class="panel-body">
+						<ul id="gamelist">
+						</ul>
+					</div>
+				</div>
+				
+				<div id="ships" class="panel panel-warning">
+					<div class="panel-heading">
+						<h2 class="panel-title">Boten</h2>
+					</div>
+					<div class="panel-body">
+					</div>
+				</div>
+		
+				<button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Start spel</button>
+			</div>
+			
+			
+		</div>
+		<div class="row">
+		</div>
+	
+	</div>
+	
+	<div id="myModal" class="modal fade">
+		<div class="modal-dialog">
+			
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Modal title</h4>
+				</div>
+				
+				<div class="modal-body">
+					<p>One fine body&hellip;</p>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div><!-- /.modal-content -->
+			
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	</body>
+	
+</html>

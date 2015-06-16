@@ -1,0 +1,60 @@
+body {
+	background-color: #000000;
+}
+
+#gameboard {
+	width: 720px;
+	margin: 0 auto;
+	
+}
+
+#gameboard #locations {
+	width: 700px;
+	height: 700px;
+	background-image: url('../images/water_texture.jpg');
+	}
+	
+#gameboard #locations .cell {
+	float: left;
+	width: 70px;
+	height: 70px;
+	word-wrap: break-word;
+	border: solid 1px #00FF00;
+	overflow:hidden;
+}
+
+#gameboard #y-as div, #gameboard #x-as div {
+	/*border: solid 2px #00FF00;*/
+	font-weight: bold;
+	color: #EEEEEE;
+}
+
+#gameboard #y-as div {
+	height: 70px;
+	width: 20px;
+	line-height: 70px;
+}
+
+#gameboard #x-as div {
+	float: right;
+	width: 70px;
+	height: 20px;
+	text-align: center;
+}
+
+#gamelist {
+	/*background-color: #00FF00;*/
+	list-style-type: none;
+}
+
+#ships {
+	/*background-color: #00FF00;*/
+}
+
+.hit {
+	background-color: #FF0000;
+}
+
+.missed {
+	background-color: #0000FF;
+}
