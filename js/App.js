@@ -1,7 +1,7 @@
 var App = new function() {
 	
 	// Properties
-	this.gameBoard = '.gameBoard';
+	this.gameBoard = '.gameboard';
 	
 	// Methods
 	this.generateCoords = function() {
@@ -23,7 +23,8 @@ var App = new function() {
 		
 		$.each(coords, function(index, value){
 			var cell = '<div class="cell" data-x="'+ value.x + '" data-y="'+ value.y + '"></div>';
-			$(gameBoard + ' .locations').append(cell);
+			$(App.gameBoard + ' .locations').append(cell);
+			console.log('hoi');
 		});
 	};
 
