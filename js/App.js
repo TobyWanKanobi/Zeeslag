@@ -24,7 +24,19 @@ var App = new function() {
 		$.each(coords, function(index, value){
 			var cell = '<div class="cell" data-x="'+ value.x + '" data-y="'+ value.y + '"></div>';
 			$(App.gameBoard + ' .locations').append(cell);
-			console.log('hoi');
+		});
+	};
+	
+	this.populateGameList = function(myGames) {
+		
+		$('#gamelist tbody').empty();
+		if(myGames.length === 0) {
+			$('#gamelist tbody').append('<tr><td colspan="3">You have no games yet</td></tr>');
+			return false;
+		}
+		
+		$.each(myGames, function(index, game){
+			$('#gamelist tbody').append('<tr><td>' + game._id + '</td><td>' + game.enemyName + '</td>SATUS<td>' + game.status + '</td><td><button class="btn btn-success play-game" data-gameId="'+ game._id +'">PLAY</button></td></tr>');
 		});
 	};
 
@@ -34,5 +46,25 @@ var App = new function() {
 $(document).ready(function(){
 	
 	App.initBoard();
+	BattleshipAPI.getMyGames(App.populateGameList);
+	
+	// New player game 
+	$('#newPlayerGame').on('click', function(){
+		BattleshipAPI.newGame('PLAYER', App.populateGameList);
+	});
+	
+	// New CPU game
+	$('#newCPUGame').on('click', function(){
+		BattleshipAPI.newGame('CPU', App.populateGameList);
+	});
+	
+	// Delete all games
+	$('#deleteGames').on('click', function(){
+		BattleshipAPI.deleteGames(App.populateGameList);
+	});
+	
+	$('#gamelist tbody').on('click', '.play-game', function(event){
+		alert($(event.target).data('gameid'));
+	});
 
 });
