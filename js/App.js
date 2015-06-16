@@ -1,11 +1,40 @@
-$(document).ready(function(){
-	var service = new BattleshipService();
-	var gameBoard = '#gameboard #locations';
-	var coords = [];
-	var currentGame;
+var App = new function() {
 	
+	// Properties
+	this.gameBoard = '.gameBoard';
+	
+	// Methods
+	this.generateCoords = function() {
+		
+		var coords = [];
+		for(var i = 1; i < 11; i++) {
+			
+			for(var x = 0; x < 10; x++) {
+				coords.push({'x' : String.fromCharCode(65 + x), 'y' : i});
+			}
+		}
+		
+		return coords;
+	};
+	
+	this.initBoard = function() {
+		
+		var coords = this.generateCoords();
+		
+		$.each(coords, function(index, value){
+			var cell = '<div class="cell" data-x="'+ value.x + '" data-y="'+ value.y + '"></div>';
+			$(gameBoard + ' .locations').append(cell);
+		});
+	};
+
+};
+
+
+$(document).ready(function(){
+	
+	App.initBoard();
 	// Get My games and fill	
-	var populateGames = function() {
+	/*var populateGames = function() {
 		
 		service.getGames(function(games){
 			
@@ -20,48 +49,15 @@ $(document).ready(function(){
 			
 		});	
 		
-	};
-	
-	// Create coordinates
-	for(var i = 10; i > 0; i--) {
-		
-		for(var x = 0; x < 10; x++) {
-			coords.push({
-				'x' : String.fromCharCode(65 + x),
-				'y' : i}
-			);
-		}
-	}
-	
-	// Put events on buttons
-	$('#newGamePlayer').on('click', function(e){
-		service.createPlayerGame(populateGames);
-	});
-	
-	$('#newGameComputer').on('click', function(e){
-		service.createComputerGame(populateGames);
-	});
-	
-	// Generate grid
-	$.each(coords, function(index, value){
-		var cell = '<div class="cell" data-x="'+ value.x + '" data-y="'+ value.y + '"></div>';
-		$(gameBoard).append(cell);
-	});
-	
+	};*/
+
 	// Get ships
-	service.getShips(function (result) {
+	/*service.getShips(function (result) {
 		
 		$.each(result, function (index, value) {
 			$('#ships .panel-body').append('<div>' + value.name + '</div>');
 		});
 		
-	});
-	
-	populateGames();
-	
-	// Add hit or miss class to cell
-	var cells = $('.cell');
-	$(cells[40]).addClass('missed');
-	$(cells[75]).addClass('hit');
+	});*/
 	
 });
