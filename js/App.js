@@ -39,6 +39,10 @@ var App = new function() {
         })
     }
 
+    this.setShip = function(id){
+
+    }
+
 };
 
 
@@ -51,7 +55,7 @@ $(document).ready(function(){
     // drag and drop the boats
     $('.boat').draggable();
 
-    $('div', '.locations').each(function() {
+    $('div',  '#myGameboard' , '.locations' ).each(function() {
 
         var $div = $(this);
 
@@ -62,6 +66,7 @@ $(document).ready(function(){
                         /*top: $div.offset().top,
                         left: $div.offset().left*/
                     });
+                App.
                 $div.addClass("filled");
                console.log('hoi');
             }
