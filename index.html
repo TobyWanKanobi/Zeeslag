@@ -106,8 +106,9 @@
 
         <div class="col-md-3 panels"  >
             <div>
-                <button id="newGamePlayer" class="btn btn-success">VS Player</button>
-                <button id="newGameComputer" class="btn btn-primary">VS CPU</button>
+                <button id="newPlayerGame" class="btn btn-success">VS Player</button>
+                <button id="newCPUGame" class="btn btn-primary">VS CPU</button>
+				<button id="deleteGames" class="btn btn-danger">Delete all games</button>
             </div>
             <br />
             <div class="panel panel-warning ">
@@ -115,8 +116,18 @@
                     <h2 class="panel-title">Spellen</h2>
                 </div>
                 <div class="panel-body gamepanel">
-                    <div id="gamelist">
-                    </div>
+				
+					<table id="gamelist" class="table table-bordered">
+						<thead>
+							<tr>
+								<th>#ID</th>
+								<th>#OPPONENT</th>
+								<th colspan="2">#STATUS</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
                 </div>
             </div>
             <div>
@@ -169,7 +180,7 @@
 <!-- /.modal -->
 <script type="text/javascript">
 
-	/*BattleshipAPI.deleteGames(function(response){ console.log(response); });
+	/*
 	BattleshipAPI.getMyGames(function(response){console.log(response);});
 	BattleshipAPI.newPlayerGame(function(response){ console.log(response);});
 	BattleshipAPI.newCPUGame(function(response){ console.log(response);});
@@ -177,8 +188,6 @@
 	BattleshipAPI.getShips(function(response){ console.log(response);});
 	BattleshipAPI.submitGameBoard(1, {}, function(response){ console.log(response); });
 	BattleshipAPI.submitShot(1, {}, function(response){ console.log(response); });*/
-	
-	console.log(App.generateCoords());
 </script>
 </body>
 

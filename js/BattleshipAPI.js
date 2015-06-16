@@ -19,7 +19,7 @@ var BattleshipAPI = new function() {
 			dataType : 'json',
 			type : 'GET',
 			success : function(response) {
-				console.log(response);
+				callback(response);
 			},
 			error : function(response) {
 				// onError do nothing
@@ -38,7 +38,7 @@ var BattleshipAPI = new function() {
 			dataType : 'json',
 			type : 'DELETE',
 			success : function(response) {
-				callback(response);
+				BattleshipAPI.getMyGames(callback);
 			},
 			error : function(response) {
 				// onError do nothing
@@ -47,42 +47,27 @@ var BattleshipAPI = new function() {
 		
 	};
 	
-	// Via deze route kun je een nieuwe game opvragen met als tegenstander een andere student.
-	this.newPlayerGame = function(callback) {
+	this.newGame = function(gameType, callback) {
 		
-		var url = this.url.replace('[option]', 'games');
+		var url;
 		
-		$.ajax({
-			url : url, 
-			dataType : 'json',
-			type : 'GET',
-			success : function(response) {
-				callback(response);
-			}, 
-			error : function(response) {
-				// onError do nothing
-			},
-		});
-	
-	};
-	
-	// Via deze route kun je een nieuwe game opvragen met als tegenstander een computer.
-	this.newCPUGame = function(callback) {
-		
-		var url = this.url.replace('[option]', 'games/AI');
+		if(gameType === 'PLAYER') {
+			var url = this.url.replace('[option]', 'games');
+		} else if (gameType === 'CPU') {
+			var url = this.url.replace('[option]', 'games/AI');
+		}
 		
 		$.ajax({
 			url : url, 
 			dataType : 'json',
 			type : 'GET',
 			success : function(response) {
-				callback(response);
+				BattleshipAPI.getMyGames(callback);
 			}, 
 			error : function(response) {
 				// onError do nothing
 			},
 		});
-	
 	};
 	
 	// Voor elke game kun je alle informatie opvragen doormiddel van het Id.
