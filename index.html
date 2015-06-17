@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!--<link rel="shortcut icon" href="/images/favicon.ico">-->
-    <title>Zeeslag</title>
+    <title>Battleship</title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
@@ -31,10 +31,11 @@
 </div>
 
 <div class="container content">
+	
     <div class="row">
 
         <div class="col-md-4">
-            <h2 class="h2">Your board</h2>
+            <h2 class="h2">My board</h2>
             <div id="myGameboard" class="gameboard">
                 <div class="y-as" style="float:left;">
                     <div>1</div>
@@ -69,7 +70,7 @@
         </div>
 
         <div class="col-md-4">
-            <h2 class="h2"> Enemy's board</h2>
+            <h2 class="h2">Enemy's board</h2>
             <div id="enemyGameboard" class="gameboard">
                 <div class="y-as" style="float:left;">
                     <div>1</div>
@@ -113,7 +114,7 @@
             <br />
             <div class="panel panel-warning ">
                 <div class="panel-heading ">
-                    <h2 class="panel-title">Spellen</h2>
+                    <h2 class="panel-title">My games</h2>
                 </div>
                 <div class="panel-body gamepanel">
 				
@@ -130,20 +131,17 @@
 					</table>
                 </div>
             </div>
-            <div>
-                <button id="resetGames" class="btn btn-primary">Reset Spellen</button>
-            </div>
             <br />
             <div class="shipPanel">
                 <div id="ships" class="panel panel-warning">
                     <div class="panel-heading">
-                        <h2 class="panel-title">Boten</h2>
+                        <h2 class="panel-title">Boats</h2>
                     </div>
                     <div class="panel-body shiplist">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Ready</button>
                     </div>
                 </div>
             </div>
-            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Start spel</button>
         </div>
 
 
@@ -178,17 +176,6 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-<script type="text/javascript">
-
-	/*
-	BattleshipAPI.getMyGames(function(response){console.log(response);});
-	BattleshipAPI.newPlayerGame(function(response){ console.log(response);});
-	BattleshipAPI.newCPUGame(function(response){ console.log(response);});
-	BattleshipAPI.getGameInfo(100, function(response){ console.log(response); });
-	BattleshipAPI.getShips(function(response){ console.log(response);});
-	BattleshipAPI.submitGameBoard(1, {}, function(response){ console.log(response); });
-	BattleshipAPI.submitShot(1, {}, function(response){ console.log(response); });*/
-</script>
 </body>
 
 </html>
