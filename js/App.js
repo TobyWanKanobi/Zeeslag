@@ -92,7 +92,18 @@ var App = new function() {
     }
 
     this.setShip = function(x, y, id){
-        App.shipLocations
+        var length = App.shipLocations.ships[id].length;
+        for (var i = 0; i < length; i++) {
+            console.log(App.nextChar(length, i));
+        }
+        
+        /*$('.cell', '.locations').each(function(){
+
+        });*/
+    }
+    
+    this.nextChar = function(c, i) {
+        return String.fromCharCode(c.charCodeAt(0) + i);
     }
 
 };
@@ -138,7 +149,7 @@ $(document).ready(function(){
                         /*top: $div.offset().top,
                         left: $div.offset().left*/
                     });
-
+                App.setShip(2,2,4)
                 $div.addClass("filled");
                console.log('hoi');
             }
