@@ -91,8 +91,8 @@ var App = new function() {
         })
     }
 
-    this.setShip = function(id){
-
+    this.setShip = function(x, y, id){
+        App.shipLocations
     }
 
 };
