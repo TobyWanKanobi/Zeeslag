@@ -2,6 +2,10 @@ body {
 	background-color: #000000;
 }
 
+.h1, .h2  {
+    color: #ffffff;
+}
+
 .gameboard {
      width: 520px;
      margin: 0 auto;
@@ -81,28 +85,18 @@ body {
     text-align: left;
 }
 
-.title {
-    text-align: center;
-    margin: 20px;
-}
-
-.h2  {
-    color: #ffffff;
-    margin-left: 40px;
+.shipPanel {
+	display: none;
 }
 
 div#boat.dropped {
     background: purple;
 }
 
-
-
 .filled {
     background: red;
 }
 
 .boat {
-
-
     cursor: move;
 }
