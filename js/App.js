@@ -2,7 +2,46 @@ var App = new function() {
 	
 	// Properties
 	this.gameBoard = '.gameboard';
-    this.shipLocations = { "ships": []};
+    this.shipLocations = { "ships": [{
+        "_id": 1,
+        "length": 3,
+        "name": "Destoryer",
+        "startCell" : { "x": "a", "y": 1 },
+        "isVertical" : false,
+        "__v": 0
+    },
+        {
+            "_id": 0,
+            "length": 2,
+            "name": "Patrol boat",
+            "startCell" : { "x": "a", "y": 2 },
+            "isVertical" : false,
+            "__v": 0
+        },
+        {
+            "_id": 2,
+            "length": 3,
+            "name": "Submarine",
+            "startCell" : { "x": "a", "y": 3 },
+            "isVertical" : false,
+            "__v": 0
+        },
+        {
+            "_id": 3,
+            "length": 4,
+            "name": "Battleship",
+            "startCell" : { "x": "a", "y": 4 },
+            "isVertical" : false,
+            "__v": 0
+        },
+        {
+            "_id": 4,
+            "length": 5,
+            "name": "Aircraft carrier",
+            "startCell" : { "x": "a", "y": 5 },
+            "isVertical" : false,
+            "__v": 0
+        }]};
 
 
 	
@@ -46,7 +85,7 @@ var App = new function() {
     this.populateShipList = function(shipList) {
         $(shipList).each(function(){
 
-            $('.shiplist').append('<table><tr><td width="200">'+$(this)[0].name+'</td><td width="100"><img src="images/glyphicons-212-right-arrow.png" class="boat" /><img src="images/glyphicons-213-down-arrow.png" class="boat" /></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr></table>');
+            $('.shiplist').append('<table><tr><td width="200">'+$(this)[0].name+'</td><td width="100"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img src="images/glyphicons-213-down-arrow.png" class="boat" /></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr></table>');
             $('.boat').draggable();
         })
     }

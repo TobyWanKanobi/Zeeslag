@@ -2,7 +2,7 @@ var BattleshipAPI = new function() {
 
 	// Properties
 	this.baseUrl = 'http://zeeslagavans.herokuapp.com/';
-	this.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.InRwbWFpcGF1QHN0dWRlbnQuYXZhbnMubmwi.ku3W_i5exSexpTyOUYcrrmnBwF3k4A9-oOLDrll8Vv8';
+	this.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.ImtrZGFlbWVuQGF2YW5zLm5sIg.v6DcoUJhuSZOzhf8RON-m5mC8SnhgajsnVUJ9D_BM4Q';
 	this.url = this.baseUrl + '[option]?token=' + this.token; 
 	
 	// Methods
