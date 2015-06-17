@@ -60,9 +60,12 @@ var App = new function() {
 		
 		if(game.status === 'started'){
 		
-			var ship;
 			$.each(game.myGameboard.ships, function(index, ship){
 				drawShip(ship);
+			});
+			
+			$.each(game.enemyGameboard.shots, function(index, shot){
+				drawShot(shot);
 			});
 			console.log('playGame');
 		} else if(game.status === 'setup'){
@@ -129,16 +132,31 @@ $(document).ready(function(){
 });
 
 var drawShip = function(ship) {
-	//alert('draw this boat on board' + ship);
 	var coord = ship.startCell;
 	for (i= 0; i < ship.length; i++){
 		$('#myGameboard .cell[data-x="'+coord.x+'"][data-y="'+coord.y+'"]').css('background-color', '#0000FF');
 		if(ship.isVertical) {
-			console.log('ja');
+			coord.y++;
 		} else {
 			coord.x = nextChar(coord.x);
 		}
 	}
+	
+	$.each(ship.hits, function(index, hit){
+		$('#myGameboard .cell[data-x="'+hit.x+'"][data-y="'+hit.y+'"]').css('background-color', '#FF0000');
+	});
+};
+
+var drawShot = function(shot) {
+	
+	var color = '#0000FF';
+	
+	if(shot.isHit){
+		color = '#FF0000';
+	}
+	
+	$('#enemyGameboard .cell[data-x="'+shot.x+'"][data-y="'+shot.y+'"]').css('background-color', color);
+	
 };
 
 var nextChar = function(c){
@@ -166,7 +184,7 @@ var testGame = {
 						'length':		4,
 						'isVertical':	false,
 						'_id'		:	"554239de10da4dc04faacdaf",
-						'hits'		:	[{"x":"i","y":1,"_id":"55423a8710da4dc04faacdba"}],
+						//'hits'		:	[{"x":"i","y":1,"_id":"55423a8710da4dc04faacdba"}],
 						'startCell'	:	{'x':'a','y':7}
 						},
 						
