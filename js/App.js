@@ -84,11 +84,13 @@ var App = new function() {
 	};
 
     this.populateShipList = function(shipList) {
+        $('.shiplist').append('<table id="shipRow">');
         $(shipList).each(function(){
 
-            $('.shiplist').append('<table id="shipRow"><tr><td width="200">'+$(this)[0].name+'</td><td width="100" data-id="'+$(this)[0]._id+'"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img data-type="vertical" src="images/glyphicons-213-down-arrow.png" class="boat" /></div><div class="resetButton" style="display: none"><button class="btn btn-danger resetship">Reset</button></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr></table>');
+            $('.shiplist').append('<tr><td width="200">'+$(this)[0].name+'</td><td width="100" data-id="'+$(this)[0]._id+'"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img data-type="vertical" src="images/glyphicons-213-down-arrow.png" class="boat" /></div><div class="resetButton" style="display: none"><button class="btn btn-danger resetship">Reset</button></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr>');
             $('.boat').draggable();
         })
+        $('.shiplist').append('</table>');
     }
 
     this.loopCoords = function (length, x, y, dir){
