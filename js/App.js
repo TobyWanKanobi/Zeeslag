@@ -2,7 +2,47 @@ var App = new function() {
 	
 	// Properties
 	this.gameBoard = '.gameboard';
-    this.shipLocations = { "ships": []};
+    this.shipLocations = { "ships": [
+        {
+            "_id": 0,
+            "length": 2,
+            "name": "Patrol boat",
+            "startCell" : { "x": "a", "y": 2 },
+            "isVertical" : false,
+            "__v": 0
+        },
+        {
+            "_id": 1,
+            "length": 3,
+            "name": "Destoryer",
+            "startCell" : { "x": "a", "y": 1 },
+            "isVertical" : false,
+            "__v": 0
+        },
+        {
+            "_id": 2,
+            "length": 3,
+            "name": "Submarine",
+            "startCell" : { "x": "a", "y": 3 },
+            "isVertical" : false,
+            "__v": 0
+        },
+        {
+            "_id": 3,
+            "length": 4,
+            "name": "Battleship",
+            "startCell" : { "x": "a", "y": 4 },
+            "isVertical" : false,
+            "__v": 0
+        },
+        {
+            "_id": 4,
+            "length": 5,
+            "name": "Aircraft carrier",
+            "startCell" : { "x": "a", "y": 5 },
+            "isVertical" : false,
+            "__v": 0
+        }]};
 
 
 	
@@ -14,6 +54,7 @@ var App = new function() {
 			
 			for(var x = 0; x < 10; x++) {
 				coords.push({'x' : String.fromCharCode(97 + x), 'y' : i});
+
 			}
 		}
 		
@@ -25,7 +66,7 @@ var App = new function() {
 		var coords = this.generateCoords();
 		
 		$.each(coords, function(index, value){
-			var cell = '<div class="cell" data-x="'+ value.x + '" data-y="'+ value.y + '"></div>';
+			var cell = '<div class="cell" data-x="'+ value.x + '" data-y="'+ value.y + '"data-x-d="'+ value.d +'"></div>';
 			$(App.gameBoard + ' .locations').append(cell);
 		});
 	};
@@ -45,10 +86,12 @@ var App = new function() {
 
     this.populateShipList = function(shipList) {
        
-		$(shipList).each(function(){
-            $('.shiplist').prepend('<table><tr><td width="200">'+$(this)[0].name+'</td><td width="100"><img src="images/glyphicons-212-right-arrow.png" class="boat" /><img src="images/glyphicons-213-down-arrow.png" class="boat" /></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr></table>');
-            $('.boat').draggable();
+	    $(shipList).each(function(){
+            $('.shiplist tbody').append('<tr><td width="200">'+$(this)[0].name+'</td><td width="100" data-id="'+$(this)[0]._id+'"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img data-type="vertical" src="images/glyphicons-213-down-arrow.png" class="boat" /></div><div class="resetButton" style="display: none"><button class="btn btn-danger resetship">Reset</button></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr>');
+
         });
+		
+        $('.boat').draggable();
     };
 	
 	this.loadGame = function(game){
@@ -74,9 +117,53 @@ var App = new function() {
 		}
 	};
 
-    this.setShip = function(id){
+    this.loopCoords = function (length, x, y, dir){
+        var shipCoords = [];
+        var pos = ((dir == "horizontal") ? x : y);
+            for (var i = 0; i < length; i++) {
+                if(dir == "horizontal"){
+                    shipCoords.push([parseInt(x) + i, parseInt(y)]);
+                }else {
+                    shipCoords.push([parseInt(x), parseInt(y) + i]);
+                }
+            }
+        return shipCoords;
+    }
 
+    this.setShip = function(d, x, y, id, dir){
+        var length = App.shipLocations.ships[id].length;
+        shipCoords = App.loopCoords(length, d, y, dir);
+
+        if(App.checkCoords(shipCoords)){
+            $(shipCoords).each(function(){
+
+                $('#myGameboard div[data-x-d='+$(this)[0]+'][data-y='+$(this)[1]+']').addClass('filled');
+                App.shipLocations.ships[id].startCell = { "x": x, "y": y };
+
+            });
+        }else{
+            console.log('helaas');
+        }
+		
     };
+
+    this.checkCoords = function(coords){
+        return true;
+    }
+
+    this.draggingUI = function (id){
+        $('.shiplist td[data-id='+id+'] img').hide();
+        $('.shiplist td[data-id='+id+'] .resetButton').show('');
+    }
+
+    this.settingUI = function (id){
+        $('.shiplist td[data-id='+id+'] img').show();
+        $('.shiplist td[data-id='+id+'] .resetButton').hide('');
+    }
+    
+   this.nextChar = function(c) {
+        return String.fromCharCode(c.charCodeAt(0));
+   };
 
 };
 
@@ -108,6 +195,13 @@ $(document).ready(function(){
 		BattleshipAPI.getGameInfo(gameId, App.loadGame);
 	
 	});
+	
+	// Reset shiplocation
+	$('.shipPanel').on('click', '.resetship', function(){
+		var id = $(this).parent().attr("data-id");
+		App.settingUI(id);
+		console.log('hoi'); 
+	});
 
     // drag and drop the boats
     $('.boat').draggable();
@@ -117,18 +211,21 @@ $(document).ready(function(){
         var $div = $(this);
 
         $div.droppable({
-            drop: function() {
+            drop: function(ev, ui) {
                 $('.boat').addClass('dropped').
                     css({
                         /*top: $div.offset().top,
                         left: $div.offset().left*/
                     });
-                App.
-                $div.addClass("filled");
+
+                var shipID = $(ui.draggable).parent().attr("data-id");
+                var dir = $(ui.draggable).attr("data-type");
+
+                App.setShip($div.attr('data-x-d'),$div.attr('data-x') ,$div.attr('data-y'),shipID, dir);
+                App.draggingUI(shipID);
             }
         });
     });
-
 });
 
 var drawShip = function(ship) {
