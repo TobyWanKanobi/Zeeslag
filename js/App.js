@@ -2,49 +2,7 @@ var App = new function() {
 	
 	// Properties
 	this.gameBoard = '.gameboard';
-    this.shipLocations = { "ships": [
-        {
-            "_id": 0,
-            "length": 2,
-            "name": "Patrol boat",
-            "startCell" : { "x": "a", "y": 2 },
-            "isVertical" : false,
-            "__v": 0
-        },
-        {
-            "_id": 1,
-            "length": 3,
-            "name": "Destoryer",
-            "startCell" : { "x": "a", "y": 1 },
-            "isVertical" : false,
-            "__v": 0
-        },
-        {
-            "_id": 2,
-            "length": 3,
-            "name": "Submarine",
-            "startCell" : { "x": "a", "y": 3 },
-            "isVertical" : false,
-            "__v": 0
-        },
-        {
-            "_id": 3,
-            "length": 4,
-            "name": "Battleship",
-            "startCell" : { "x": "a", "y": 4 },
-            "isVertical" : false,
-            "__v": 0
-        },
-        {
-            "_id": 4,
-            "length": 5,
-            "name": "Aircraft carrier",
-            "startCell" : { "x": "a", "y": 5 },
-            "isVertical" : false,
-            "__v": 0
-        }]};
-
-
+	this.localShips = [];
 	
 	// Methods
 	this.generateCoords = function() {
@@ -84,9 +42,11 @@ var App = new function() {
 		});
 	};
 
-    this.populateShipList = function(shipList) {
+    this.populateShipList = function(ships) {
        
-	    $(shipList).each(function(){
+	    $(ships).each(function(index, ship){
+			
+			App.localShips[ship._id] = new shipObj(ship);
             $('.shiplist tbody').append('<tr><td width="200">'+$(this)[0].name+'</td><td width="100" data-id="'+$(this)[0]._id+'"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img data-type="vertical" src="images/glyphicons-213-down-arrow.png" class="boat" /></div><div class="resetButton" style="display: none"><button class="btn btn-danger resetship">Reset</button></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr>');
 
         });
@@ -95,7 +55,7 @@ var App = new function() {
     };
 	
 	this.loadGame = function(game){
-		game = testGame;
+		//game = testGame;
 		$('#enemy-label').remove();
 		$('#turn-label').remove();
 		//$('.content').prepend('<h2 id="turn-label"></h2>');
@@ -110,42 +70,28 @@ var App = new function() {
 			$.each(game.enemyGameboard.shots, function(index, shot){
 				drawShot(shot);
 			});
-			console.log('playGame');
 		} else if(game.status === 'setup'){
 			$('.shipPanel').css('display', 'block');
-			console.log('placeShips!');
 		}
 	};
 
-    this.loopCoords = function (length, x, y, dir){
+    this.loopCoords = function (coord, length, isVertical){
+		
+		var temp = coord
         var shipCoords = [];
-        var pos = ((dir == "horizontal") ? x : y);
-            for (var i = 0; i < length; i++) {
-                if(dir == "horizontal"){
-                    shipCoords.push([parseInt(x) + i, parseInt(y)]);
-                }else {
-                    shipCoords.push([parseInt(x), parseInt(y) + i]);
-                }
-            }
+         
+		for (var i = 0; i < length; i++) {
+                
+			if(isVertical){
+                shipCoords.push({'x' : coord.x, 'y' : coord.y + i});
+            }else {
+				shipCoords.push({'x' : String.fromCharCode(coord.x.charCodeAt(0)+ i), 'y' : coord.y});
+			
+			}
+        }
+	
         return shipCoords;
     }
-
-    this.setShip = function(d, x, y, id, dir){
-        var length = App.shipLocations.ships[id].length;
-        shipCoords = App.loopCoords(length, d, y, dir);
-
-        if(App.checkCoords(shipCoords)){
-            $(shipCoords).each(function(){
-
-                $('#myGameboard div[data-x-d='+$(this)[0]+'][data-y='+$(this)[1]+']').addClass('filled');
-                App.shipLocations.ships[id].startCell = { "x": x, "y": y };
-
-            });
-        }else{
-            console.log('helaas');
-        }
-		
-    };
 
     this.checkCoords = function(coords){
         return true;
@@ -199,31 +145,39 @@ $(document).ready(function(){
 	// Reset shiplocation
 	$('.shipPanel').on('click', '.resetship', function(){
 		var id = $(this).parent().attr("data-id");
-		App.settingUI(id);
-		console.log('hoi'); 
+		App.settingUI(id); 
 	});
 
     // drag and drop the boats
     $('.boat').draggable();
 
-    $('div',  '#myGameboard' , '.locations' ).each(function() {
-
-        var $div = $(this);
-
-        $div.droppable({
+    $('#myGameboard .locations .cell').each(function(index, cell) {
+		
+        $(cell).droppable({
             drop: function(ev, ui) {
-                $('.boat').addClass('dropped').
-                    css({
-                        /*top: $div.offset().top,
-                        left: $div.offset().left*/
-                    });
-
-                var shipID = $(ui.draggable).parent().attr("data-id");
-                var dir = $(ui.draggable).attr("data-type");
-
-                App.setShip($div.attr('data-x-d'),$div.attr('data-x') ,$div.attr('data-y'),shipID, dir);
-                App.draggingUI(shipID);
-            }
+				
+				$('.boat').addClass('dropped');
+				var shipID = $(ui.draggable).parent().attr("data-id");
+				
+				var isVertical = (($(ui.draggable).data('type') === 'vertical') ? true : false);
+				var coord = {'x' : $(ev.target).data('x'), 'y' : $(ev.target).data('y')};
+				App.draggingUI(shipID);
+			   
+				shipCoords = App.loopCoords(coord, App.localShips[shipID].length, isVertical);
+				
+				if(App.checkCoords(shipCoords)){
+					
+					App.localShips[shipID].isVertical = isVertical;
+					App.localShips[shipID].startCell.x = coord.x;
+					App.localShips[shipID].startCell.y = coord.y;
+					
+					$(shipCoords).each(function(index, coord){
+						$('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').addClass('filled');
+					});
+					
+				}else{
+				}
+			}
         });
     });
 });
@@ -258,6 +212,15 @@ var drawShot = function(shot) {
 
 var nextChar = function(c){
 	return String.fromCharCode(c.charCodeAt(0) + 1);
+};
+
+var shipObj = function(ship) {
+	this._id = ship._id;
+	this.length = ship.length;
+	this.name = ship.name;
+	this.startCell = {'x' : undefined, 'y' : undefined};
+	this.isVertical = ship.isVertical;
+	this.__v = ship.__v;
 };
 
 var testGame = {
