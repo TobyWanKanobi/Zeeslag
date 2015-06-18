@@ -53,7 +53,7 @@ var App = new function() {
 		for(var i = 1; i < 11; i++) {
 			
 			for(var x = 0; x < 10; x++) {
-				coords.push({'x' : String.fromCharCode(65 + x), 'y' : i});
+				coords.push({'x' : String.fromCharCode(65 + x), 'y' : i, 'd' : (x+1)});
 			}
 		}
 		
@@ -65,7 +65,7 @@ var App = new function() {
 		var coords = this.generateCoords();
 		
 		$.each(coords, function(index, value){
-			var cell = '<div class="cell" data-x="'+ value.x + '" data-y="'+ value.y + '"></div>';
+			var cell = '<div class="cell" data-x="'+ value.x + '" data-y="'+ value.y + '"data-x-d="'+ value.d +'"></div>';
 			$(App.gameBoard + ' .locations').append(cell);
 		});
 	};
@@ -91,20 +91,46 @@ var App = new function() {
         })
     }
 
-    this.setShip = function(x, y, id){
+    this.loopCoords = function (length, x, y, dir){
+        var shipCoords = [];
+        var pos = ((dir == "horizontal") ? x : y);
+            for (var i = 0; i < length; i++) {
+                if(dir == "horizontal"){
+                    shipCoords.push([parseInt(x) + i, parseInt(y)]);
+                }else {
+                    shipCoords.push([parseInt(x), parseInt(y) + i]);
+                }
+            }
+
+
+        return shipCoords;
+    }
+
+    this.setShip = function(x, y, id, dir){
         var length = App.shipLocations.ships[id].length;
-        for (var i = 0; i < length; i++) {
-            console.log(App.nextChar(length, i));
+        shipCoords = App.loopCoords(length, x, y, dir);
+        console.log(shipCoords);
+        if(App.checkCoords(shipCoords)){
+            $(shipCoords).each(function(){
+
+                $('#myGameboard div[data-x-d='+$(this)[0]+'][data-y='+$(this)[1]+']').addClass('filled');
+            });
+        }else{
+            console.log('helaas');
         }
-        
+
         /*$('.cell', '.locations').each(function(){
 
         });*/
     }
-    
-    this.nextChar = function(c, i) {
-        return String.fromCharCode(c.charCodeAt(0) + i);
+
+    this.checkCoords = function(coords){
+        return true;
     }
+    
+   /* this.nextChar = function(c, i) {
+        return String.fromCharCode(c.charCodeAt(0) + i);
+    }*/
 
 };
 
@@ -141,17 +167,20 @@ $(document).ready(function(){
     $('div',  '#myGameboard' , '.locations' ).each(function() {
 
         var $div = $(this);
-        console.log($div);
+
         $div.droppable({
-            drop: function() {
+            drop: function(ev, ui) {
                 $('.boat').addClass('dropped').
                     css({
                         /*top: $div.offset().top,
                         left: $div.offset().left*/
                     });
-                App.setShip(2,2,4)
-                $div.addClass("filled");
-               console.log('hoi');
+                var shipID = $(ui.draggable).parent().attr("data-id");
+                var dir = $(ui.draggable).attr("data-type");
+
+                App.setShip($div.attr('data-x-d'),$div.attr('data-y'),shipID, dir);
+               /* $div.addClass("filled");*/
+
             }
         });
     });
