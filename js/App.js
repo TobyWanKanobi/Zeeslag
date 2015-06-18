@@ -86,7 +86,7 @@ var App = new function() {
     this.populateShipList = function(shipList) {
         $(shipList).each(function(){
 
-            $('.shiplist').append('<table><tr><td width="200">'+$(this)[0].name+'</td><td width="100" data-id="'+$(this)[0]._id+'"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img data-type="vertical" src="images/glyphicons-213-down-arrow.png" class="boat" /></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr></table>');
+            $('.shiplist').append('<table id="shipRow"><tr><td width="200">'+$(this)[0].name+'</td><td width="100" data-id="'+$(this)[0]._id+'"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img data-type="vertical" src="images/glyphicons-213-down-arrow.png" class="boat" /></div><div class="resetButton" style="display: none"><button class="btn btn-danger resetship">Reset</button></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr></table>');
             $('.boat').draggable();
         })
     }
@@ -101,19 +101,19 @@ var App = new function() {
                     shipCoords.push([parseInt(x), parseInt(y) + i]);
                 }
             }
-
-
         return shipCoords;
     }
 
-    this.setShip = function(x, y, id, dir){
+    this.setShip = function(d, x, y, id, dir){
         var length = App.shipLocations.ships[id].length;
-        shipCoords = App.loopCoords(length, x, y, dir);
-        console.log(shipCoords);
+        shipCoords = App.loopCoords(length, d, y, dir);
+
         if(App.checkCoords(shipCoords)){
             $(shipCoords).each(function(){
 
                 $('#myGameboard div[data-x-d='+$(this)[0]+'][data-y='+$(this)[1]+']').addClass('filled');
+                App.shipLocations.ships[id].startCell = { "x": x, "y": y };
+
             });
         }else{
             console.log('helaas');
@@ -126,6 +126,16 @@ var App = new function() {
 
     this.checkCoords = function(coords){
         return true;
+    }
+
+    this.draggingUI = function (id){
+        $('.shiplist td[data-id='+id+'] img').hide();
+        $('.shiplist td[data-id='+id+'] .resetButton').show('');
+    }
+
+    this.settingUI = function (id){
+        $('.shiplist td[data-id='+id+'] img').show();
+        $('.shiplist td[data-id='+id+'] .resetButton').hide('');
     }
     
    /* this.nextChar = function(c, i) {
@@ -178,11 +188,16 @@ $(document).ready(function(){
                 var shipID = $(ui.draggable).parent().attr("data-id");
                 var dir = $(ui.draggable).attr("data-type");
 
-                App.setShip($div.attr('data-x-d'),$div.attr('data-y'),shipID, dir);
-               /* $div.addClass("filled");*/
-
+                App.setShip($div.attr('data-x-d'),$div.attr('data-x') ,$div.attr('data-y'),shipID, dir);
+                App.draggingUI(shipID);
             }
         });
+    });
+
+    $('.shipPanel').on('click', '.resetship', function(){
+        var id = $(this).parent().attr("data-id");
+        App.settingUI(id);
+        console.log('hoi'); 
     });
 
 });
