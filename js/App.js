@@ -2,7 +2,8 @@ var App = new function() {
 	
 	// Properties
 	this.gameBoard = '.gameboard';
-	this.localShips = [];
+	this.localShips = {'ships': []};
+    this.loadedGameId;
 	
 	// Methods
 	this.generateCoords = function() {
@@ -49,16 +50,18 @@ var App = new function() {
        
 	    $(ships).each(function(index, ship){
 			
-			App.localShips[ship._id] = new shipObj(ship);
+			App.localShips.ships[ship._id] = new shipObj(ship);
             $('.shiplist tbody').append('<tr><td width="200">'+$(this)[0].name+'</td><td width="100" data-id="'+$(this)[0]._id+'"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img data-type="vertical" src="images/glyphicons-213-down-arrow.png" class="boat" /></div><div class="resetButton" style="display: none"><button class="btn btn-danger resetship">Reset</button></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr>');
 
         });
 		
-        $('.boat').draggable();
+        $('.boat').draggable({
+            revert: true
+        });
     };
 	
 	this.loadGame = function(game){
-		game = testGame;
+        App.loadedGameId = game._id;
 		$('#enemy-label').remove();
 		$('#turn-label').remove();
 		//$('.content').prepend('<h2 id="turn-label"></h2>');
@@ -93,7 +96,35 @@ var App = new function() {
     }
 
     this.checkCoords = function(coords){
-        return true;
+
+        var result = true;
+        $(coords).each(function(){
+            console.log($(this)[0]['x'].charCodeAt(0));
+            if($('#myGameboard div[data-x='+$(this)[0]['x']+'][data-y='+$(this)[0]['y']+']').hasClass('filled')){
+                console.log("ik ben al gevuld!");
+                result = false;
+            }else if($(this)[0]['y'] > 10 || $(this)[0]['y'] < 1){
+                console.log('Y-Ass klopt niet!');
+                result = false;
+            }else if($(this)[0]['x'].charCodeAt(0) > 106 || $(this)[0]['x'].charCodeAt(0) < 97){
+                console.log('X-Ass klopt niet!');
+                result = false;
+            }
+        })
+        return result;
+    }
+
+    this.checkBoard = function(){
+
+        var result = true;
+
+        $(App.localShips.ships).each(function(){
+            if(typeof $(this)[0]['startCell']['x'] === 'undefined'){
+               result = false;
+            }
+        })
+
+        return result;
     }
 
     this.draggingUI = function (id){
@@ -162,23 +193,29 @@ $(document).ready(function(){
     $('#myGameboard .locations .cell').each(function(index, cell) {
 		
         $(cell).droppable({
+
             drop: function(ev, ui) {
 				
-				$('.boat').addClass('dropped');
+				//$('.boat').addClass('dropped');
 				var shipID = $(ui.draggable).parent().attr("data-id");
 				
 				var isVertical = (($(ui.draggable).data('type') === 'vertical') ? true : false);
 				var coord = {'x' : $(ev.target).data('x'), 'y' : $(ev.target).data('y')};
-				App.draggingUI(shipID);
-			   
-				shipCoords = App.loopCoords(coord, App.localShips[shipID].length, isVertical);
+
+
+				shipCoords = App.loopCoords(coord, App.localShips.ships[shipID].length, isVertical);
 				
 				if(App.checkCoords(shipCoords)){
 					
-					App.localShips[shipID].isVertical = isVertical;
-					App.localShips[shipID].startCell.x = coord.x;
-					App.localShips[shipID].startCell.y = coord.y;
-					
+					App.localShips.ships[shipID].isVertical = isVertical;
+					App.localShips.ships[shipID].startCell.x = coord.x;
+					App.localShips.ships[shipID].startCell.y = coord.y;
+                    if(App.checkBoard()){
+                        $('#placeBoard').prop("disabled",false);
+                    }
+
+
+                    App.draggingUI(shipID);
 					$(shipCoords).each(function(index, coord){
 						$('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').addClass('filled');
 					});
@@ -188,6 +225,17 @@ $(document).ready(function(){
 			}
         });
     });
+
+    $('#placeBoard').click( function(){
+        if(App.checkBoard()){
+            console.log("hoihoihoi"+App.loadedGameId);
+
+            BattleshipAPI.submitGameBoard(App.loadedGameId, App.localShips, App.populateGameList);
+        }else{
+            alert('Eerste even de bootjes plaatsen');
+        }
+
+    })
 });
 
 var drawShips = function(game) {
