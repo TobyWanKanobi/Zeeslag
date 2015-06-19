@@ -12,7 +12,6 @@ var App = new function() {
 			
 			for(var x = 0; x < 10; x++) {
 				coords.push({'x' : String.fromCharCode(97 + x), 'y' : i});
-
 			}
 		}
 		
@@ -38,6 +37,10 @@ var App = new function() {
 		}
 		
 		$.each(myGames, function(index, game){
+			
+			if(game.enemyName === undefined){
+				game.enemyName = 'Waiting for player'
+			}
 			$('#gamelist tbody').append('<tr><td>' + game._id + '</td><td>' + game.enemyName + '</td>SATUS<td>' + game.status + '</td><td><button class="btn btn-success play-game" data-gameId="'+ game._id +'">PLAY</button></td></tr>');
 		});
 	};
@@ -55,21 +58,17 @@ var App = new function() {
     };
 	
 	this.loadGame = function(game){
-		//game = testGame;
+		game = testGame;
 		$('#enemy-label').remove();
 		$('#turn-label').remove();
 		//$('.content').prepend('<h2 id="turn-label"></h2>');
 		$('.content').prepend('<h1 id="enemy-label" class="h1">Now playing vs ' + game.enemyName + '</h1>');
 		
 		if(game.status === 'started'){
-		
-			$.each(game.myGameboard.ships, function(index, ship){
-				drawShip(ship);
-			});
 			
-			$.each(game.enemyGameboard.shots, function(index, shot){
-				drawShot(shot);
-			});
+			drawShips(game);
+			drawShots(game);
+			
 		} else if(game.status === 'setup'){
 			$('.shipPanel').css('display', 'block');
 		}
@@ -135,11 +134,20 @@ $(document).ready(function(){
 		BattleshipAPI.deleteGames(App.populateGameList);
 	});
 	
+	$('#refresh-games').on('click', function(){
+		BattleshipAPI.getMyGames(App.populateGameList);
+		console.log('haha');
+	});
+	
 	$('#gamelist tbody').on('click', '.play-game', function(event){
 	
 		var gameId = $(event.target).data('gameid');
 		BattleshipAPI.getGameInfo(gameId, App.loadGame);
 	
+	});
+	
+	$('#enemyGameboard .locations').on('click', '.cell', function(e){
+		alert('SHOTS fired!');
 	});
 	
 	// Reset shiplocation
@@ -182,32 +190,46 @@ $(document).ready(function(){
     });
 });
 
-var drawShip = function(ship) {
-	var coord = ship.startCell;
-	for (i= 0; i < ship.length; i++){
-		$('#myGameboard .cell[data-x="'+coord.x+'"][data-y="'+coord.y+'"]').css('background-color', '#0000FF');
-		if(ship.isVertical) {
-			coord.y++;
-		} else {
-			coord.x = nextChar(coord.x);
+var drawShips = function(game) {
+
+	$.each(game.myGameboard.ships, function(index, ship){
+		
+		for (i= 0; i < ship.length; i++){
+			
+			var color = '#0000FF';
+			
+			if(ship.isVertical) {
+				fillCell('#myGameboard', {'x' : ship.startCell.x, 'y' : ship.startCell.y + i}, color);
+			} else {
+				fillCell('#myGameboard', {'x' : String.fromCharCode(ship.startCell.x.charCodeAt(0) + i), 'y' : ship.startCell.y}, color);
+			}
 		}
-	}
-	
-	$.each(ship.hits, function(index, hit){
-		$('#myGameboard .cell[data-x="'+hit.x+'"][data-y="'+hit.y+'"]').css('background-color', '#FF0000');
+		
+		$.each(ship.hits, function(index, hit){
+			fillCell('#myGameboard', hit, '#FF0000');
+		});
+		
 	});
+	
 };
 
-var drawShot = function(shot) {
+var drawShots = function(game) {
 	
-	var color = '#0000FF';
+	$.each(game.enemyGameboard.shots, function(index, shot){
+		
+		var color = '#0000FF';
+		
+		if(shot.isHit){
+			color = '#FF0000';
+		}
+		
+		fillCell('#enemyGameboard', shot, color);
+	});
 	
-	if(shot.isHit){
-		color = '#FF0000';
-	}
-	
-	$('#enemyGameboard .cell[data-x="'+shot.x+'"][data-y="'+shot.y+'"]').css('background-color', color);
-	
+};
+
+var fillCell = function(boardId, coord, color) {
+	$(boardId + ' .cell[data-x="'+coord.x+'"][data-y="'+coord.y+'"]').css('background-color', color);
 };
 
 var nextChar = function(c){
@@ -235,17 +257,16 @@ var testGame = {
 					'ships'	:[{
 						'length':		2,
 						'isVertical':	true,
-						'_id'		:	"554239de10da4dc04faacdaf",
-						'hits'		:	[{"x":"i","y":1,"_id":"55423a8710da4dc04faacdba"}],
-						'startCell'	:	{"x":"i","y":1}
+						'_id'		:	'554239de10da4dc04faacdaf',
+						'hits'		:	[{'x':'i','y':1,'_id':'55423a8710da4dc04faacdba'}],
+						'startCell'	:	{'x':'i','y':1}
 						},
-						
 						{
-						'length':		4,
-						'isVertical':	false,
-						'_id'		:	"554239de10da4dc04faacdaf",
-						//'hits'		:	[{"x":"i","y":1,"_id":"55423a8710da4dc04faacdba"}],
-						'startCell'	:	{'x':'a','y':7}
+							'length':		4,
+							'isVertical':	false,
+							'_id'		:	"554239de10da4dc04faacdaf",
+							'hits'		:	[{"x":"i","y":1,"_id":"55423a8710da4dc04faacdba"}],
+							'startCell'	:	{'x':'a','y':7}
 						},
 						
 						{

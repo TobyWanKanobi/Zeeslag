@@ -10,7 +10,7 @@ body {
      width: 520px;
      margin: 0 auto;
 
- }
+}
 
 #enemyGameboard div.cell:hover {
     background-color:#FF0000;
@@ -80,7 +80,7 @@ body {
 }
 
 .gamepanel {
-    height: 165px;
+    height: 400px;
     overflow-y:scroll;
     text-align: left;
 }

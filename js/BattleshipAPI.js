@@ -19,8 +19,8 @@ var BattleshipAPI = new function() {
 			dataType : 'json',
 			type : 'GET',
 			success : function(response) {
-				console.log(response);
 				callback(response);
+				console.log('call');
 			},
 			error : function(response) {
 				// onError do nothing
