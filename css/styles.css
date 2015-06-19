@@ -2,6 +2,11 @@ body {
 	background-color: #000000;
 }
 
+.container {
+    width: 95%;
+}
+
+
 .h1, .h2  {
     color: #ffffff;
 }
@@ -15,6 +20,13 @@ body {
 #enemyGameboard div.cell:hover {
     background-color:#FF0000;
 
+}
+
+.gameboard h2 {
+	margin: 0;
+	padding: 10px;
+	text-align: center;
+	background-color: #000000;
 }
 
 .gameboard .locations {
@@ -32,10 +44,20 @@ body {
 	overflow:hidden;
 }
 
-.gameboard .y-as div, #gameboard #x-as div {
-	/*border: solid 2px #00FF00;*/
+.gameboard .x-as, .gameboard .y-as {
+	text-align: center;
 	font-weight: bold;
 	color: #EEEEEE;
+	background-color: #000000;
+}
+
+.gameboard .x-as {
+	float: right;
+	
+}
+
+.gameboard .y-as {
+	float: left;
 }
 
 .gameboard .y-as div {
@@ -46,15 +68,17 @@ body {
 
 .gameboard .x-as div {
 	float: right;
-    color: #ffffff;
-	width: 50px;
 	height: 20px;
-	text-align: center;
+	width: 50px;
 }
 
 #gamelist {
 	/*background-color: #00FF00;*/
 	list-style-type: none;
+}
+
+.selected {
+	background-color: #EEEEEE;
 }
 
 #ships {
@@ -67,16 +91,6 @@ body {
 
 .missed {
 	background-color: #0000FF;
-}
-
-.container {
-    width: 95%;
-    margin-right: 20px;
-}
-
-
-.header {
-    margin-bottom: 80px;
 }
 
 .gamepanel {

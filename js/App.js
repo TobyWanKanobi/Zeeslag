@@ -65,7 +65,8 @@ var App = new function() {
 		$('#enemy-label').remove();
 		$('#turn-label').remove();
 		//$('.content').prepend('<h2 id="turn-label"></h2>');
-		$('.content').prepend('<h1 id="enemy-label" class="h1">Now playing vs ' + game.enemyName + '</h1>');
+		//$('.content').prepend('<h1 id="enemy-label" class="h1">Now playing vs ' + game.enemyName + '</h1>');
+		$('.shipPanel').css('display', 'none');
 		
 		if(game.status === 'started'){
 			
@@ -73,6 +74,7 @@ var App = new function() {
 			drawShots(game);
 			
 		} else if(game.status === 'setup'){
+			BattleshipAPI.getShips(App.populateShipList);
 			$('.shipPanel').css('display', 'block');
 		}
 	};
@@ -173,6 +175,8 @@ $(document).ready(function(){
 	$('#gamelist tbody').on('click', '.play-game', function(event){
 	
 		var gameId = $(event.target).data('gameid');
+		$('#gamelist .selected').removeClass('selected');
+		$(event.target).closest('tr').addClass('selected');
 		BattleshipAPI.getGameInfo(gameId, App.loadGame);
 	
 	});
@@ -210,6 +214,7 @@ $(document).ready(function(){
 					App.localShips.ships[shipID].isVertical = isVertical;
 					App.localShips.ships[shipID].startCell.x = coord.x;
 					App.localShips.ships[shipID].startCell.y = coord.y;
+					
                     if(App.checkBoard()){
                         $('#placeBoard').prop("disabled",false);
                     }
