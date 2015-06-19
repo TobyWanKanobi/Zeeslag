@@ -113,13 +113,15 @@ var BattleshipAPI = new function() {
 	this.submitGameBoard = function(gameId, gameBoard, callback) {
 	
 		var url = this.url.replace('[option]', 'games/' + gameId + '/gameboards');
-		
+		console.log('hallo: '+ gameId);
 		$.ajax({
 			url : url, 
 			dataType : 'json',
 			type : 'POST',
+            data: gameBoard,
 			success : function(response) {
-				callback(response);
+				//callback(response);
+                BattleshipAPI.getMyGames(callback);
 			}, 
 			error : function(response) {
 				// onError do nothing
