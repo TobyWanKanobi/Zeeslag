@@ -117,14 +117,11 @@ var App = new function() {
         var result = true;
         $(coords).each(function(){
             console.log($(this)[0]['x'].charCodeAt(0));
-            if($('#myGameboard div[data-x='+$(this)[0]['x']+'][data-y='+$(this)[0]['y']+']').hasClass('filled')){
-                console.log("ik ben al gevuld!");
+            if($('#myGameboard div[data-x='+$(this)[0]['x']+'][data-y='+$(this)[0]['y']+']').hasClass('filled')){             
                 result = false;
             }else if($(this)[0]['y'] > 10 || $(this)[0]['y'] < 1){
-                console.log('Y-Ass klopt niet!');
                 result = false;
             }else if($(this)[0]['x'].charCodeAt(0) > 106 || $(this)[0]['x'].charCodeAt(0) < 97){
-                console.log('X-Ass klopt niet!');
                 result = false;
             }
         })
@@ -196,15 +193,25 @@ $(document).ready(function(){
 	
 	});
 	
+	var AfterShot = function(coord, status) {
 	
+		var color;
+		
+		if(status === 'BOOM') {
+			color = '#FF0000';
+			console.log('Shot hit!');
+		} else if(status === 'SPLASH') {
+			color = '#0000FF';
+			console.log('shot missed!');
+		}
+		
+		fillCell('#enemyGameboard', coord, color);
+	};
 	// Shot Click EVENT
 	$('#enemyGameboard .locations').on('click', '.cell', function(e){
 		
 		var coord = {'x' : $(e.target).data('x'), 'y' : $(e.target).data('y')};
-		console.log('Shoot EVENT FIRED' + coord);
-		console.log(coord);
-		BattleshipAPI.submitShot(App.currentGame._id, coord, App.loadGame);
-	//	alert('SHOTS fired!');
+		BattleshipAPI.submitShot(App.currentGame._id, coord, App.loadGame, AfterShot);
 		
 	});
 	
@@ -223,7 +230,6 @@ $(document).ready(function(){
 
             drop: function(ev, ui) {
 				
-				//$('.boat').addClass('dropped');
 				var shipID = $(ui.draggable).parent().attr("data-id");
 				
 				var isVertical = (($(ui.draggable).data('type') === 'vertical') ? true : false);
@@ -255,8 +261,6 @@ $(document).ready(function(){
 
     $('#placeBoard').click( function(){
         if(App.checkBoard()){
-            console.log("hoihoihoi"+App.loadedGameId);
-
             BattleshipAPI.submitGameBoard(App.loadedGameId, App.localShips, App.populateGameList);
         }else{
             alert('Eerste even de bootjes plaatsen');

@@ -18,7 +18,7 @@ body {
 }
 
 #enemyGameboard div.cell:hover {
-    background-color:#FF0000;
+    background-color:#63FF1D;
 
 }
 
@@ -108,7 +108,7 @@ div#boat.dropped {
 }
 
 .filled {
-    background: red;
+    background: #0000FF;
 }
 
 .boat {

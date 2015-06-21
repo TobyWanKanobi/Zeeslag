@@ -20,7 +20,6 @@ var BattleshipAPI = new function() {
 			type : 'GET',
 			success : function(response) {
 				callback(response);
-				console.log('call');
 			},
 			error : function(response) {
 				// onError do nothing
@@ -83,7 +82,6 @@ var BattleshipAPI = new function() {
 			type : 'GET',
 			success : function(response) {
 				callback(response);
-				console.log('success');
 			}, 
 			error : function(response) {
 				// onError do nothing
@@ -114,7 +112,7 @@ var BattleshipAPI = new function() {
 	this.submitGameBoard = function(gameId, gameBoard, callback) {
 	
 		var url = this.url.replace('[option]', 'games/' + gameId + '/gameboards');
-		console.log('hallo: '+ gameId);
+		
 		$.ajax({
 			url : url, 
 			dataType : 'json',
@@ -130,9 +128,8 @@ var BattleshipAPI = new function() {
 	};
 	
 	// Submit boards
-	this.submitShot = function(gameId, shot, callback) {
+	this.submitShot = function(gameId, shot, callback, cb) {
 	
-		console.log('sumbitShot()');
 		var url = this.url.replace('[option]', 'games/' + gameId + '/shots');
 		
 		$.ajax({
@@ -141,12 +138,12 @@ var BattleshipAPI = new function() {
 			data : shot,
 			type : 'POST',
 			success : function(response) {
-				BattleshipAPI.getGameInfo(gameId, callback);
-				console.log('Shot success');
+					cb(shot, response);
+					BattleshipAPI.getGameInfo(gameId, callback);
 			}, 
 			error : function(response) {
+				cb(shot, response);
 				BattleshipAPI.getGameInfo(gameId, callback);
-				console.log('shotfail');
 				// onError do nothing
 			},
 		});
