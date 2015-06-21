@@ -1,6 +1,7 @@
 var App = new function() {
 	
 	// Properties
+	this.currentGame;
 	this.gameBoard = '.gameboard';
 	this.localShips = {'ships': []};
     this.loadedGameId;
@@ -24,7 +25,7 @@ var App = new function() {
 		var coords = this.generateCoords();
 		
 		$.each(coords, function(index, value){
-			var cell = '<div class="cell" data-x="'+ value.x + '" data-y="'+ value.y + '"data-x-d="'+ value.d +'"></div>';
+			var cell = '<div class="cell" data-x="'+ value.x + '" data-y="'+ value.y +'"></div>';
 			$(App.gameBoard + ' .locations').append(cell);
 		});
 	};
@@ -37,6 +38,8 @@ var App = new function() {
 			return false;
 		}
 		
+		$('#gamelist tbody').empty();
+		
 		$.each(myGames, function(index, game){
 			
 			if(game.enemyName === undefined){
@@ -44,15 +47,18 @@ var App = new function() {
 			}
 			$('#gamelist tbody').append('<tr><td>' + game._id + '</td><td>' + game.enemyName + '</td>SATUS<td>' + game.status + '</td><td><button class="btn btn-success play-game" data-gameId="'+ game._id +'">PLAY</button></td></tr>');
 		});
+		
 	};
 
     this.populateShipList = function(ships) {
        
+	   $('.shiplist tbody').empty();
+	   
 	    $(ships).each(function(index, ship){
 			
 			App.localShips.ships[ship._id] = new shipObj(ship);
             $('.shiplist tbody').append('<tr><td width="200">'+$(this)[0].name+'</td><td width="100" data-id="'+$(this)[0]._id+'"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img data-type="vertical" src="images/glyphicons-213-down-arrow.png" class="boat" /></div><div class="resetButton" style="display: none"><button class="btn btn-danger resetship">Reset</button></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr>');
-
+			
         });
 		
         $('.boat').draggable({
@@ -60,23 +66,32 @@ var App = new function() {
         });
     };
 	
+	// Load GAME
 	this.loadGame = function(game){
+		App.currentGame = game;
         App.loadedGameId = game._id;
-		$('#enemy-label').remove();
-		$('#turn-label').remove();
-		//$('.content').prepend('<h2 id="turn-label"></h2>');
-		//$('.content').prepend('<h1 id="enemy-label" class="h1">Now playing vs ' + game.enemyName + '</h1>');
+		
+		$('#myGameboard .cell').css('background-color', '');
+		$('#enemyGameboard .cell').css('background-color', '');
+		$('#your-turn').html('');
+
 		$('.shipPanel').css('display', 'none');
 		
 		if(game.status === 'started'){
+			if(game.yourTurn) {
+				$('#your-turn').html('It\'s my turn');
+			} else {
+				$('#your-turn').html('Opponent\'s turn');
+			}
 			
-			drawShips(game);
 			drawShots(game);
 			
 		} else if(game.status === 'setup'){
 			BattleshipAPI.getShips(App.populateShipList);
 			$('.shipPanel').css('display', 'block');
 		}
+		
+		drawShips(game);
 	};
 
     this.loopCoords = function (coord, length, isVertical){
@@ -181,8 +196,16 @@ $(document).ready(function(){
 	
 	});
 	
+	
+	// Shot Click EVENT
 	$('#enemyGameboard .locations').on('click', '.cell', function(e){
-		alert('SHOTS fired!');
+		
+		var coord = {'x' : $(e.target).data('x'), 'y' : $(e.target).data('y')};
+		console.log('Shoot EVENT FIRED' + coord);
+		console.log(coord);
+		BattleshipAPI.submitShot(App.currentGame._id, coord, App.loadGame);
+	//	alert('SHOTS fired!');
+		
 	});
 	
 	// Reset shiplocation
@@ -205,7 +228,6 @@ $(document).ready(function(){
 				
 				var isVertical = (($(ui.draggable).data('type') === 'vertical') ? true : false);
 				var coord = {'x' : $(ev.target).data('x'), 'y' : $(ev.target).data('y')};
-
 
 				shipCoords = App.loopCoords(coord, App.localShips.ships[shipID].length, isVertical);
 				
@@ -296,47 +318,4 @@ var shipObj = function(ship) {
 	this.startCell = {'x' : undefined, 'y' : undefined};
 	this.isVertical = ship.isVertical;
 	this.__v = ship.__v;
-};
-
-var testGame = {
-  '_id':1,
-  'status'		:	'started',
-  'yourTurn'	:	false,
-  'enemyId'		:	'55268f3aa43c82a4244bb00a',
-  'enemyName'	:	'rechtsboven@gmail.com',
-  'myGameboard':{
-					'_id'	:	20,
-					'__v'	:	3,
-					'ships'	:[{
-						'length':		2,
-						'isVertical':	true,
-						'_id'		:	'554239de10da4dc04faacdaf',
-						'hits'		:	[{'x':'i','y':1,'_id':'55423a8710da4dc04faacdba'}],
-						'startCell'	:	{'x':'i','y':1}
-						},
-						{
-							'length':		4,
-							'isVertical':	false,
-							'_id'		:	"554239de10da4dc04faacdaf",
-							'hits'		:	[{"x":"i","y":1,"_id":"55423a8710da4dc04faacdba"}],
-							'startCell'	:	{'x':'a','y':7}
-						},
-						
-						{
-						'length'	:	3,
-						"isVertical":true,
-						"_id":"554239de10da4dc04faacdae",
-						"hits":[],
-						"startCell":{"x":"h","y":1}
-					}],
-				},
-  'enemyGameboard' :{
-    '_id'	:	21,
-    '__v'	:	3,
-    'shots'	:[
-		{"x":"c","y":2,"_id":"55423a7610da4dc04faacdb4"},
-    	{"x":"e","y":2,"_id":"55423a7f10da4dc04faacdb6"},
-    	{"x":"d","y":2,"isHit":true,"_id":"55423a8510da4dc04faacdb9"}
-    ]
-  }
 };

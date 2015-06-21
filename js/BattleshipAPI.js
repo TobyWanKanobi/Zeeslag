@@ -74,7 +74,7 @@ var BattleshipAPI = new function() {
 	// Voor elke game kun je alle informatie opvragen doormiddel van het Id.
 	// Het is alleen mogelijk gegevens op te halen van een game waar je zelf aan deel neemt.
 	this.getGameInfo = function(gameId, callback) {
-		
+		console.log('GetGameI');
 		var url = this.url.replace('[option]', 'games/' + gameId);
 		
 		$.ajax({
@@ -83,6 +83,7 @@ var BattleshipAPI = new function() {
 			type : 'GET',
 			success : function(response) {
 				callback(response);
+				console.log('success');
 			}, 
 			error : function(response) {
 				// onError do nothing
@@ -120,8 +121,7 @@ var BattleshipAPI = new function() {
 			type : 'POST',
             data: gameBoard,
 			success : function(response) {
-				//callback(response);
-                BattleshipAPI.getMyGames(callback);
+				BattleshipAPI.getMyGames(callback);
 			}, 
 			error : function(response) {
 				// onError do nothing
@@ -132,16 +132,21 @@ var BattleshipAPI = new function() {
 	// Submit boards
 	this.submitShot = function(gameId, shot, callback) {
 	
+		console.log('sumbitShot()');
 		var url = this.url.replace('[option]', 'games/' + gameId + '/shots');
 		
 		$.ajax({
 			url : url, 
 			dataType : 'json',
+			data : shot,
 			type : 'POST',
 			success : function(response) {
-				callback(response);
+				BattleshipAPI.getGameInfo(gameId, callback);
+				console.log('Shot success');
 			}, 
 			error : function(response) {
+				BattleshipAPI.getGameInfo(gameId, callback);
+				console.log('shotfail');
 				// onError do nothing
 			},
 		});
