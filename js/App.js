@@ -231,6 +231,21 @@ var App = new function() {
         $(boardId + ' .cell[data-x="'+coord.x+'"][data-y="'+coord.y+'"]').css('background-color', color);
     };
 
+    this.AfterShot = function(coord, status) {
+
+        var color;
+
+        if(status === 'BOOM') {
+            color = '#FF0000';
+            console.log('Shot hit!');
+        } else if(status === 'SPLASH') {
+            color = '#0000FF';
+            console.log('shot missed!');
+        }
+
+        App.fillCell('#enemyGameboard', coord, color);
+    };
+
 };
 
 
@@ -269,25 +284,12 @@ $(document).ready(function(){
 	
 	});
 	
-	var AfterShot = function(coord, status) {
-	
-		var color;
-		
-		if(status === 'BOOM') {
-			color = '#FF0000';
-			console.log('Shot hit!');
-		} else if(status === 'SPLASH') {
-			color = '#0000FF';
-			console.log('shot missed!');
-		}
-		
-		App.fillCell('#enemyGameboard', coord, color);
-	};
+
 	// Shot Click EVENT
 	$('#enemyGameboard .locations').on('click', '.cell', function(e){
 		
 		var coord = {'x' : $(e.target).data('x'), 'y' : $(e.target).data('y')};
-		BattleshipAPI.submitShot(App.currentGame._id, coord, App.loadGame, AfterShot);
+		BattleshipAPI.submitShot(App.currentGame._id, coord, App.loadGame, App.AfterShot);
 		
 	});
 	

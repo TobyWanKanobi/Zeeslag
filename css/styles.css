@@ -23,8 +23,9 @@ body {
 
 }
 
-#enemyGameboard div.cell:hover {
-    background-color:#63FF1D;
+#enemyGameboard div.cell:hover{
+   background-color:#63FF1D;
+
 
 }
 
