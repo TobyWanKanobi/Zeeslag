@@ -84,33 +84,34 @@ var App = new function() {
 
 		$('.shipPanel').css('display', 'none');
 		
-		if(game.status === 'started'){
+		if(game.status === 'started' || game.status === 'done'){
 			if(game.yourTurn) {
 				$('#your-turn').html('It\'s my turn');
 			} else {
 				$('#your-turn').html('Opponent\'s turn');
 			}
-			
-			drawShots(game);
-			drawShips(game);	
+
+            if(game.status === 'done') {
+
+                if (game.youWon) {
+                    $('#modalWon').modal('show');
+                } else {
+                    $('#modalLost').modal('show');
+                }
+            }
+
+			App.drawShots(game);
+			App.drawShips(game);
 			
 		} else if(game.status === 'setup'){
 			BattleshipAPI.getShips(App.populateShipList);
 			if (typeof game.myGameboard !== 'undefined') {
-				drawShips(game);
+				App.drawShips(game);
 				$('.shipPanel').css('display', 'none');
 			}
 			else {
 				console.log('geen tekenen')
 				$('.shipPanel').css('display', 'block');
-			}
-			
-		} else if(game.status === 'done'){
-			//console.log(game);
-			if(game.youWon) {
-				$('#modalWon').modal('show');
-			} else {
-				$('#modalLost').modal('show');
 			}
 			
 		}
@@ -186,10 +187,49 @@ var App = new function() {
         $('.shiplist td[data-id='+id+'] img').show();
         $('.shiplist td[data-id='+id+'] .resetButton').hide('');
     }
-    
-   this.nextChar = function(c) {
-        return String.fromCharCode(c.charCodeAt(0));
-   };
+
+
+    this.drawShips = function(game) {
+
+        $.each(game.myGameboard.ships, function(index, ship){
+
+            for (i= 0; i < ship.length; i++){
+
+                var color = '#0000FF';
+
+                if(ship.isVertical) {
+                    App.fillCell('#myGameboard', {'x' : ship.startCell.x, 'y' : ship.startCell.y + i}, color);
+                } else {
+                    App.fillCell('#myGameboard', {'x' : String.fromCharCode(ship.startCell.x.charCodeAt(0) + i), 'y' : ship.startCell.y}, color);
+                }
+            }
+
+            $.each(ship.hits, function(index, hit){
+                App.fillCell('#myGameboard', hit, '#FF0000');
+            });
+
+        });
+
+    };
+
+    this.drawShots = function(game) {
+
+        $.each(game.enemyGameboard.shots, function(index, shot){
+
+            var color = '#0000FF';
+
+            if(shot.isHit){
+                color = '#FF0000';
+            }
+
+            App.fillCell('#enemyGameboard', shot, color);
+        });
+
+    };
+
+    this.fillCell = function(boardId, coord, color) {
+        $(boardId + ' .cell[data-x="'+coord.x+'"][data-y="'+coord.y+'"]').css('background-color', color);
+    };
 
 };
 
@@ -241,7 +281,7 @@ $(document).ready(function(){
 			console.log('shot missed!');
 		}
 		
-		fillCell('#enemyGameboard', coord, color);
+		App.fillCell('#enemyGameboard', coord, color);
 	};
 	// Shot Click EVENT
 	$('#enemyGameboard .locations').on('click', '.cell', function(e){
@@ -347,52 +387,6 @@ $(document).ready(function(){
         })
     });
 });
-
-var drawShips = function(game) {
-
-	$.each(game.myGameboard.ships, function(index, ship){
-		
-		for (i= 0; i < ship.length; i++){
-			
-			var color = '#0000FF';
-			
-			if(ship.isVertical) {
-				fillCell('#myGameboard', {'x' : ship.startCell.x, 'y' : ship.startCell.y + i}, color);
-			} else {
-				fillCell('#myGameboard', {'x' : String.fromCharCode(ship.startCell.x.charCodeAt(0) + i), 'y' : ship.startCell.y}, color);
-			}
-		}
-		
-		$.each(ship.hits, function(index, hit){
-			fillCell('#myGameboard', hit, '#FF0000');
-		});
-		
-	});
-	
-};
-
-var drawShots = function(game) {
-	
-	$.each(game.enemyGameboard.shots, function(index, shot){
-		
-		var color = '#0000FF';
-		
-		if(shot.isHit){
-			color = '#FF0000';
-		}
-		
-		fillCell('#enemyGameboard', shot, color);
-	});
-	
-};
-
-var fillCell = function(boardId, coord, color) {
-	$(boardId + ' .cell[data-x="'+coord.x+'"][data-y="'+coord.y+'"]').css('background-color', color);
-};
-
-var nextChar = function(c){
-	return String.fromCharCode(c.charCodeAt(0) + 1);
-};
 
 var shipObj = function(ship) {
 	this._id = ship._id;
