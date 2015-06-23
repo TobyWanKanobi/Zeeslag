@@ -57,7 +57,7 @@ var App = new function() {
 	    $(ships).each(function(index, ship){
 			
 			App.localShips.ships[ship._id] = new shipObj(ship);
-            $('.shiplist tbody').append('<tr><td width="200">'+$(this)[0].name+'</td><td width="100" data-id="'+$(this)[0]._id+'"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img data-type="vertical" src="images/glyphicons-213-down-arrow.png" class="boat" /></div><div class="resetButton" style="display: none"><button class="btn btn-danger resetShip">Reset</button></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr>');
+            $('.shiplist tbody').append('<tr><td width="200" class="ship'+$(this)[0]._id+'label">'+$(this)[0].name+'</td><td width="100" data-id="'+$(this)[0]._id+'"><img data-type="horizontal" src="images/glyphicons-212-right-arrow.png" class="boat" /><img data-type="vertical" src="images/glyphicons-213-down-arrow.png" class="boat" /></div><div class="resetButton" style="display: none"><button class="btn btn-danger resetShip">Reset</button></div></td><td><div class="boatLength">'+$(this)[0].length +'</div></td></tr>');
 
         });
 		
@@ -65,7 +65,7 @@ var App = new function() {
             revert: true,
             drag: function(){
                 // as you drag, add your "dragging" class, like so:
-                console.log($());
+
             }
         });
     };
@@ -76,7 +76,9 @@ var App = new function() {
         App.loadedGameId = game._id;
 		
 		$('#myGameboard .cell').css('background-color', '');
-		$('#enemyGameboard .cell').css('background-color', '');
+        $('#myGameboard .cell').removeClass('ship0 ship1 ship2 ship3 ship4 filled');
+        $('#enemyGameboard .cell').css('background-color', '');
+
 		$('#your-turn').html('');
 
 		$('.shipPanel').css('display', 'none');
@@ -98,20 +100,31 @@ var App = new function() {
 		drawShips(game);
 	};
 
-    this.loopCoords = function (coord, length, isVertical){
-		
-		var temp = coord
+    this.loopCoords = function(coord, length, isVertical) {
+
         var shipCoords = [];
-         
-		for (var i = 0; i < length; i++) {
-                
-			if(isVertical){
+
+        for (var i = 0; i < length; i++) {
+
+            if(isVertical){
                 shipCoords.push({'x' : coord.x, 'y' : coord.y + i});
             }else {
-				shipCoords.push({'x' : String.fromCharCode(coord.x.charCodeAt(0)+ i), 'y' : coord.y});
-			
-			}
+                shipCoords.push({'x' : String.fromCharCode(coord.x.charCodeAt(0)+ i), 'y' : coord.y});
+
+            }
         }
+
+        return shipCoords;
+    }
+
+    this.loopCoordsObj = function (object, target, length){
+
+        var shipID = object.parent().attr("data-id");
+
+        var isVertical = ((object.data('type') === 'vertical') ? true : false);
+        var coord = {'x' : target.data('x'), 'y' : target.data('y')};
+
+        var shipCoords = App.loopCoords(coord, App.localShips.ships[shipID].length, isVertical);
 	
         return shipCoords;
     }
@@ -120,7 +133,7 @@ var App = new function() {
 
         var result = true;
         $(coords).each(function(){
-            console.log($(this)[0]['x'].charCodeAt(0));
+
             if($('#myGameboard div[data-x='+$(this)[0]['x']+'][data-y='+$(this)[0]['y']+']').hasClass('filled')){             
                 result = false;
             }else if($(this)[0]['y'] > 10 || $(this)[0]['y'] < 1){
@@ -137,7 +150,7 @@ var App = new function() {
         var result = true;
 
         $(App.localShips.ships).each(function(){
-            if(typeof $(this)[0]['startCell']['x'] === 'undefined'){
+            if(typeof $(this)[0]['startCell']['x'] === 'undefined' || $(this)[0]['startCell']['x'] == 'undefined'){
                result = false;
             }
         })
@@ -235,23 +248,25 @@ $(document).ready(function(){
         $(cell).droppable({
 
             drop: function(ev, ui) {
-
-				var shipID = $(ui.draggable).parent().attr("data-id");
-				
-				var isVertical = (($(ui.draggable).data('type') === 'vertical') ? true : false);
-				var coord = {'x' : $(ev.target).data('x'), 'y' : $(ev.target).data('y')};
-
-				shipCoords = App.loopCoords(coord, App.localShips.ships[shipID].length, isVertical);
+                shipID = $(ui.draggable).parent('td').attr('data-id');
+                var isVertical = (($(ui.draggable).data('type') === 'vertical') ? true : false);
+                var coord = {'x' : $(ev.target).data('x'), 'y' : $(ev.target).data('y')};
+				shipCoords = App.loopCoordsObj($(ui.draggable), $(ev.target));
                 var valid = (App.checkCoords(shipCoords) ? 'valid' : 'invalid');
-                    
+
+                $(shipCoords).each(function(index, coord){
+                    $('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').removeClass(valid);
+                });
 				if(App.checkCoords(shipCoords)){
 					
 					App.localShips.ships[shipID].isVertical = isVertical;
 					App.localShips.ships[shipID].startCell.x = coord.x;
 					App.localShips.ships[shipID].startCell.y = coord.y;
 					
-                    /*if(App.checkBoard()){
+                 /*   if(App.checkBoard()){
                         $('#placeBoard').prop("disabled",false);
+                    }else {
+                        $('#placeBoard').prop("disabled",true);
                     }*/
 
 
@@ -259,16 +274,12 @@ $(document).ready(function(){
 					$(shipCoords).each(function(index, coord){
 						$('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').addClass('ship'+shipID+' filled');
 					});
-					
+
 				}
+
 			},
             over: function(ev, ui) {
-                var shipID = $(ui.draggable).parent().attr("data-id");
-
-                var isVertical = (($(ui.draggable).data('type') === 'vertical') ? true : false);
-                var coord = {'x' : $(ev.target).data('x'), 'y' : $(ev.target).data('y')};
-
-                shipCoords = App.loopCoords(coord, App.localShips.ships[shipID].length, isVertical);
+                shipCoords = App.loopCoordsObj($(ui.draggable), $(ev.target));
                 var valid = (App.checkCoords(shipCoords) ? 'valid' : 'invalid');
 
                 $(shipCoords).each(function(index, coord){
@@ -277,12 +288,7 @@ $(document).ready(function(){
 
             },
             out: function(ev, ui) {
-                var shipID = $(ui.draggable).parent().attr("data-id");
-
-                var isVertical = (($(ui.draggable).data('type') === 'vertical') ? true : false);
-                var coord = {'x' : $(ev.target).data('x'), 'y' : $(ev.target).data('y')};
-
-                shipCoords = App.loopCoords(coord, App.localShips.ships[shipID].length, isVertical);
+                shipCoords = App.loopCoordsObj($(ui.draggable), $(ev.target) );
                 var valid = (App.checkCoords(shipCoords) ? 'valid' : 'invalid');
 
                 $(shipCoords).each(function(index, coord){
@@ -320,7 +326,7 @@ $(document).ready(function(){
 
         // delete the boat from the board
         $(shipCoords).each(function(index, coord){
-            $('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').removeClass('ship'+shipID);
+            $('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').removeClass('ship'+shipID+' filled');
         });
 
         //refresh the table row in the table
