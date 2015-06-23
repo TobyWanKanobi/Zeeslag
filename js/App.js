@@ -89,6 +89,14 @@ var App = new function() {
 		} else if(game.status === 'setup'){
 			BattleshipAPI.getShips(App.populateShipList);
 			$('.shipPanel').css('display', 'block');
+		} else if(game.status === 'done'){
+			//console.log(game);
+			if(game.youWon) {
+				$('#modalWon').modal('show');
+			} else {
+				$('#modalLost').modal('show');
+			}
+			
 		}
 		
 		drawShips(game);
@@ -159,7 +167,6 @@ var App = new function() {
 
 
 $(document).ready(function(){
-	
 	App.initBoard();
 	BattleshipAPI.getMyGames(App.populateGameList);
 	BattleshipAPI.getShips(App.populateShipList);

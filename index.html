@@ -34,7 +34,7 @@
 	
 	<div class="row" style="height:100px;">
 		<div class="col-md-4">
-			<h2 id="your-turn">My Turn </h2>
+			<h2 id="your-turn"></h2>
 		</div>
 		<div class="col-md-4">
 		test
@@ -171,23 +171,22 @@
 
 </div>
 <img src="images/glyphicons-212-right-arrow.png" class="boat">
-<div id="myModal" class="modal fade">
+<div id="modalWon" class="modal fade">
     <div class="modal-dialog">
 
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Modal title</h4>
+                <h4 class="modal-title">Spel afgelopen</h4>
             </div>
 
             <div class="modal-body">
-                <p>One fine body&hellip;</p>
+				<p>Gefeliciteerd je hebt je tegenstander verslagen&hellip;</p>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -196,6 +195,29 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+<div id="modalLost" class="modal fade">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Spel afgelopen</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Al je schepen zijn vernietigd, je hebt verloren&hellip;</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 </body>
 
 </html>
