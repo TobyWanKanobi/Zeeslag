@@ -91,13 +91,16 @@ var App = new function() {
 			}
 			
 			drawShots(game);
+			drawShips(game);	
 			
 		} else if(game.status === 'setup'){
 			BattleshipAPI.getShips(App.populateShipList);
+			if (!typeof game.myGameboard === 'undefined') {
+				drawShips(game);
+			}
 			$('.shipPanel').css('display', 'block');
 		}
 		
-		drawShips(game);
 	};
 
     this.loopCoords = function(coord, length, isVertical) {
@@ -203,6 +206,7 @@ $(document).ready(function(){
 		console.log('haha');
 	});
 	
+	// Play GAME
 	$('#gamelist tbody').on('click', '.play-game', function(event){
 	
 		var gameId = $(event.target).data('gameid');
@@ -285,6 +289,7 @@ $(document).ready(function(){
                 $(shipCoords).each(function(index, coord){
                     $('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').addClass(valid);
                 });
+				console.log('over');
 
             },
             out: function(ev, ui) {
@@ -294,6 +299,7 @@ $(document).ready(function(){
                 $(shipCoords).each(function(index, coord){
                     $('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').removeClass(valid);
                 });
+				console.log('out');
             }
         });
     });
