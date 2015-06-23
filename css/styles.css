@@ -1,5 +1,11 @@
+
 body {
 	background-color: #000000;
+
+}
+
+#gameCon {
+    min-width: 1660px;
 }
 
 .container {
