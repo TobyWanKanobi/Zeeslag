@@ -136,3 +136,11 @@ div#boat.dropped {
 .boat {
     cursor: move;
 }
+
+.valid {
+    background: green;
+}
+
+.invalid {
+    background: red;
+}
