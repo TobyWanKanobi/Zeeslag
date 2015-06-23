@@ -63,9 +63,10 @@ var App = new function() {
 		
         $('.boat').draggable({
             revert: true,
-            drag: function(){
-                // as you drag, add your "dragging" class, like so:
-
+            stop: function(){
+                $('#myGameboard .cell').each(function(){
+                    $(this).removeClass('valid invalid');
+                })
             }
         });
     };
@@ -256,8 +257,7 @@ $(document).ready(function(){
 		App.settingUI(id); 
 	});
 
-    // drag and drop the boats
-    $('.boat').draggable();
+
 
     $('#myGameboard .locations .cell').each(function(index, cell) {
 
@@ -286,6 +286,8 @@ $(document).ready(function(){
 					});
 
 				}
+
+
 
 			},
 
