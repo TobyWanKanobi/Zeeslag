@@ -148,8 +148,6 @@ div#boat.dropped {
     color: #000000;
 }
 
-
-
 .boat {
     cursor: move;
 }
@@ -160,4 +158,27 @@ div#boat.dropped {
 
 .invalid {
     background: red;
+}
+.modal {
+  text-align: center;
+}
+
+.modal:before {
+  display: inline-block;
+  vertical-align: middle;
+  content: " ";
+  height: 100%;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+#modalWon .modal-content {
+	background-color: #5CB85C;
+}
+#modalLost .modal-content {
+	background-color: #D9534F;
 }
