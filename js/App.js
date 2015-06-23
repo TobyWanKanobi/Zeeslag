@@ -95,10 +95,15 @@ var App = new function() {
 			
 		} else if(game.status === 'setup'){
 			BattleshipAPI.getShips(App.populateShipList);
-			if (!typeof game.myGameboard === 'undefined') {
+			if (typeof game.myGameboard !== 'undefined') {
 				drawShips(game);
+				$('.shipPanel').css('display', 'none');
 			}
-			$('.shipPanel').css('display', 'block');
+			else {
+				console.log('geen tekenen')
+				$('.shipPanel').css('display', 'block');
+			}
+			
 		} else if(game.status === 'done'){
 			//console.log(game);
 			if(game.youWon) {
