@@ -73,7 +73,7 @@ var BattleshipAPI = new function() {
 	// Voor elke game kun je alle informatie opvragen doormiddel van het Id.
 	// Het is alleen mogelijk gegevens op te halen van een game waar je zelf aan deel neemt.
 	this.getGameInfo = function(gameId, callback) {
-		console.log('GetGameI');
+		/*console.log('GetGameI');*/
 		var url = this.url.replace('[option]', 'games/' + gameId);
 		
 		$.ajax({

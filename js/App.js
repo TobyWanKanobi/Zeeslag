@@ -252,7 +252,7 @@ $(document).ready(function(){
 
                     App.draggingUI(shipID);
 					$(shipCoords).each(function(index, coord){
-						$('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').addClass('filled');
+						$('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').addClass('ship'+shipID+' filled');
 					});
 					
 				}
@@ -288,7 +288,7 @@ $(document).ready(function(){
 
         // delete the boat from the board
         $(shipCoords).each(function(index, coord){
-            $('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').removeClass('filled');
+            $('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').removeClass('ship'+shipID);
         });
 
         //refresh the table row in the table

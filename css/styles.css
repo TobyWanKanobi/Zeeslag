@@ -105,10 +105,32 @@ body {
 
 div#boat.dropped {
     background: purple;
+ ;
 }
 
-.filled {
+.ship0 {
     background: #0000FF;
+    color: #0000FF;
+}
+
+.ship1 {
+    background: purple;
+    color: purple;
+}
+
+.ship2 {
+    background: orange;
+    color: orange;
+}
+
+.ship3 {
+    background: #ffff00;
+    color: #ffff00;
+}
+
+.ship4 {
+    background: green;
+    color: green;
 }
 
 .boat {
