@@ -283,7 +283,7 @@ $(document).ready(function(){
 				}
 
 			},
-     
+
             over: function(ev, ui) {
                 console.log('in!');
                 shipCoords = App.loopCoordsObj($(ui.draggable), $(ev.target));
