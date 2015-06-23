@@ -5,7 +5,7 @@ var App = new function() {
 	this.gameBoard = '.gameboard';
 	this.localShips = {'ships': []};
     this.loadedGameId;
-	
+	this.temp;
 	// Methods
 	this.generateCoords = function() {
 		
@@ -266,12 +266,6 @@ $(document).ready(function(){
 					App.localShips.ships[shipID].isVertical = isVertical;
 					App.localShips.ships[shipID].startCell.x = coord.x;
 					App.localShips.ships[shipID].startCell.y = coord.y;
-					
-                 /*   if(App.checkBoard()){
-                        $('#placeBoard').prop("disabled",false);
-                    }else {
-                        $('#placeBoard').prop("disabled",true);
-                    }*/
 
 
                     App.draggingUI(shipID);
@@ -282,25 +276,22 @@ $(document).ready(function(){
 				}
 
 			},
+     
             over: function(ev, ui) {
+                console.log('in!');
                 shipCoords = App.loopCoordsObj($(ui.draggable), $(ev.target));
+
                 var valid = (App.checkCoords(shipCoords) ? 'valid' : 'invalid');
 
+                $(App.temp).each(function(index, coord){
+                    $('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').removeClass('valid invalid');
+                })
                 $(shipCoords).each(function(index, coord){
                     $('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').addClass(valid);
                 });
-				console.log('over');
-
+				
+                App.temp = shipCoords;
             },
-            out: function(ev, ui) {
-                shipCoords = App.loopCoordsObj($(ui.draggable), $(ev.target) );
-                var valid = (App.checkCoords(shipCoords) ? 'valid' : 'invalid');
-
-                $(shipCoords).each(function(index, coord){
-                    $('#myGameboard div[data-x='+coord.x+'][data-y='+coord.y+']').removeClass(valid);
-                });
-				console.log('out');
-            }
         });
     });
 
